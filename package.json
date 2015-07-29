@@ -1,0 +1,41 @@
+{
+  "name": "TrainingModule",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "latest",
+    "bower": "latest",
+    "cookie-parser": "latest",
+    "debug": "latest",
+    "express": "latest",
+    "jade": "latest",
+    "morgan": "latest",
+    "node-compass": "latest",
+    "serve-favicon": "latest"
+  },
+  "devDependencies": {
+    "del": "latest",
+    "gulp": "latest",
+    "gulp-autoprefixer": "latest",
+    "gulp-compass": "latest",
+    "gulp-csslint": "latest",
+    "gulp-jade": "latest",
+    "gulp-jshint": "latest",
+    "gulp-livereload": "latest",
+    "gulp-load-plugins": "latest",
+    "gulp-minify-css": "latest",
+    "gulp-mocha": "latest",
+    "gulp-nodemon": "latest",
+    "gulp-plumber": "latest",
+    "gulp-rename": "latest",
+    "gulp-util": "latest",
+    "jshint-stylish": "latest",
+    "mocha": "latest",
+    "require-dir": "latest",
+    "requirejs": "latest",
+    "through": "latest"
+  }
+}

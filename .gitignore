@@ -1,0 +1,20 @@
+# IntelliJ Files
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Node Files
+.nodemonignore
+npm-debug.log
+node_modules
+
+# Sass Files
+.sass-cache/
+
+# Bower Files
+.bower-*/
+bower_components
+
+# App Files
+public/assets/

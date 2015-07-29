@@ -1,0 +1,17 @@
+{
+  "name": "TrainingModule",
+  "dependencies": {
+    "angular": "latest",
+    "angular-mocks": "latest",
+    "angular-route": "latest",
+    "angular-ui-router": "#master",
+    "underscore": "latest"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

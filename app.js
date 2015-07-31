@@ -21,8 +21,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use(express.static('bower_components'));
+app.use(express.static('public'));
 app.use('/', routes);
 app.use('/users', users);
+app.use(function(req, res) {
+  res.sendFile(__dirname + '/public/assets/html/index.html');
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

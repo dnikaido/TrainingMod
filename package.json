@@ -3,9 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "mocha": "node node_modules/.bin/mocha server/**/*.spec.js -R spec",
+    "karma": "node node_modules/karma/bin/karma start karma.conf.js",
+    "test": "npm run mocha && NODE_ENV=test npm run start & sleep 20 && npm run karma"
   },
   "dependencies": {
+    "assetmanager": "latest",
     "body-parser": "latest",
     "bower": "latest",
     "cookie-parser": "latest",
@@ -17,6 +21,7 @@
     "serve-favicon": "latest"
   },
   "devDependencies": {
+    "chai": "latest",
     "del": "latest",
     "gulp": "latest",
     "gulp-autoprefixer": "latest",
@@ -24,6 +29,7 @@
     "gulp-csslint": "latest",
     "gulp-jade": "latest",
     "gulp-jshint": "latest",
+    "gulp-karma": "latest",
     "gulp-livereload": "latest",
     "gulp-load-plugins": "latest",
     "gulp-minify-css": "latest",
@@ -33,9 +39,22 @@
     "gulp-rename": "latest",
     "gulp-util": "latest",
     "jshint-stylish": "latest",
+    "karma": "latest",
+    "karma-browserify": "latest",
+    "karma-chrome-launcher": "latest",
+    "karma-coverage": "latest",
+    "karma-firefox-launcher": "latest",
+    "karma-mocha": "latest",
+    "karma-ng-html2js-preprocessor": "latest",
+    "karma-opera-launcher": "latest",
+    "karma-phantomjs-launcher": "latest",
+    "karma-requirejs": "latest",
+    "karma-safari-launcher": "latest",
+    "karma-script-launcher": "latest",
     "mocha": "latest",
     "require-dir": "latest",
     "requirejs": "latest",
-    "through": "latest"
+    "through": "latest",
+    "underscore": "latest"
   }
 }

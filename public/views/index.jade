@@ -1,5 +1,16 @@
-extends layout
+doctype html
+html(ng-app='app')
+  head
+    base(href='/index.html')
+    title= title
+    link(rel='stylesheet', href='/public/assets/css/main.css')
+  body
+    h1 I'm loaded!
+    div(ui-view)
 
-block content
-  h1= title
-  p Welcome to #{title}
+    script(src='/angular/angular.js')
+    script(src='/angular-mocks/angular-mocks.js')
+    script(src='/angular-ui-router/release/angular-ui-router.js')
+    script(src='/app.module.js')
+    script(src='/routerHelperProvider.js')
+    script(src='/app.routes.js')

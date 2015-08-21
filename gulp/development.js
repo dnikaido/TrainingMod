@@ -5,16 +5,25 @@ var gulp = require('gulp'),
     through = require('through'),
     gutil = require('gulp-util'),
     plugins = gulpLoadPlugins(),
-    paths = {
-        js: ['*.js', 'test/**/*.js', '!test/coverage/**', '!bower_components/**', '!node_modules/**', '!public/assets/lib/**/*.js'],
-        html: ['public/assets/html/**/*.html'],
-        css: ['!bower_components/**', 'public/assets/css/*.css'],
-        sass: ['public/views/**/*.scss'],
-        jade: ['public/views/**/*.jade']
-    },
     globby = require('globby'),
     fs = require('fs'),
     _ = require('underscore');
+
+var paths = {
+    js: ['*.js', 'test/**/*.js', '!test/coverage/**', '!bower_components/**', '!node_modules/**', '!public/assets/lib/**/*.js'],
+    html: ['public/assets/html/**/*.html'],
+    css: ['!bower_components/**', 'public/assets/css/*.css'],
+    sass: ['public/views/**/*.scss'],
+    jade: ['public/views/**/*.jade']
+    },
+    javascripts = {
+        development: [
+            'bower_components/angular/angular.js',
+            'bower_components/angular-ui-router/release/angular-ui-router.js',
+            'public/**/*.js',
+            '!public/**/*.spec.js',
+            '!public/assets/**']
+    };
 
 var defaultTasks = ['jade', 'clean',  'sass', 'csslint', 'javascripts', 'devServe', 'watch'];
 
@@ -88,10 +97,10 @@ gulp.task('watch', function () {
 });
 
 gulp.task('javascripts', function() {
-    globby(['public/**/*.js', '!public/**/*.spec.js', '!public/assets/**'], function(err, paths) {
+    globby(javascripts.development, function(err, paths) {
 
         paths = _.map(paths, function(path) {
-            return path.replace('public', '');
+            return path.replace(/(public|bower_components)/, '');
         });
         fs.writeFile('public/assets/javascripts.json', JSON.stringify(paths), function(err) {
             if(err) {

@@ -46,7 +46,7 @@
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "latest",
     "karma-clear-screen-reporter": "0.0.1",
-    "karma-coverage": "latest",
+    "karma-coverage": "^0.4.2",
     "karma-firefox-launcher": "latest",
     "karma-mocha": "latest",
     "karma-ng-html2js-preprocessor": "latest",

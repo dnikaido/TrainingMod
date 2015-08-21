@@ -11,9 +11,12 @@ var gulp = require('gulp'),
         css: ['!bower_components/**', 'public/assets/css/*.css'],
         sass: ['public/views/**/*.scss'],
         jade: ['public/views/**/*.jade']
-    };
+    },
+    globby = require('globby'),
+    fs = require('fs'),
+    _ = require('underscore');
 
-var defaultTasks = ['jade', 'clean',  'sass', 'csslint', 'devServe', 'watch'];
+var defaultTasks = ['jade', 'clean',  'sass', 'csslint', 'javascripts', 'devServe', 'watch'];
 
 gulp.task('env:development', function () {
     process.env.NODE_ENV = 'development';
@@ -82,6 +85,20 @@ gulp.task('watch', function () {
     gulp.watch(paths.js, ['jshint']);
     gulp.watch(paths.css, ['csslint']).on('change', plugins.livereload.changed);
     gulp.watch(paths.sass, ['sass']);
+});
+
+gulp.task('javascripts', function() {
+    globby(['public/**/*.js', '!public/**/*.spec.js', '!public/assets/**'], function(err, paths) {
+
+        paths = _.map(paths, function(path) {
+            return path.replace('public', '');
+        });
+        fs.writeFile('public/assets/javascripts.json', JSON.stringify(paths), function(err) {
+            if(err) {
+                gutil.log(err);
+            }
+        });
+    });
 });
 
 function count(taskName, message) {

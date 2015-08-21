@@ -15,8 +15,7 @@ module.exports = function(config) {
         frameworks: ['mocha', 'chai'],
 
         // list of files / patterns to load in the browser
-        files: _.flatten(_.values(assets.core.js)).concat([
-            'public/**/*.js'
+        files: _.flatten(_.values(assets.main.js)).concat([
         ]),
 
         // list of files to exclude
@@ -24,7 +23,7 @@ module.exports = function(config) {
 
         // test results reporter to use
         // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-        reporters: ['progress', 'coverage'],
+        reporters: ['progress', 'coverage', 'clear-screen'],
 
         // coverage
         preprocessors: {
@@ -55,7 +54,7 @@ module.exports = function(config) {
         logLevel: config.LOG_DEBUG,
 
         // enable / disable watching file and executing tests whenever any file changes
-        autoWatch: false,
+        autoWatch: true,
 
         // Start these browsers, currently available:
         // - Chrome
@@ -72,6 +71,6 @@ module.exports = function(config) {
 
         // Continuous Integration mode
         // if true, it capture browsers, run tests and exit
-        singleRun: true
+        singleRun: false
     });
 };

@@ -21,8 +21,10 @@
     "serve-favicon": "latest"
   },
   "devDependencies": {
+    "angular": "^1.4.3",
     "chai": "latest",
     "del": "latest",
+    "globby": "^2.1.0",
     "gulp": "latest",
     "gulp-autoprefixer": "latest",
     "gulp-compass": "latest",
@@ -41,7 +43,9 @@
     "jshint-stylish": "latest",
     "karma": "latest",
     "karma-browserify": "latest",
+    "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "latest",
+    "karma-clear-screen-reporter": "0.0.1",
     "karma-coverage": "latest",
     "karma-firefox-launcher": "latest",
     "karma-mocha": "latest",

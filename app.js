@@ -1,11 +1,10 @@
-var express = require('express')
-    , path = require('path')
-    , favicon = require('serve-favicon')
-    , logger = require('morgan')
-    , cookieParser = require('cookie-parser')
-    , bodyParser = require('body-parser');
+'use strict';
+var express = require('express'),
+    path = require('path'),
+    logger = require('morgan'),
+    cookieParser = require('cookie-parser'),
+    bodyParser = require('body-parser');
 
-var javascripts = require('./public/assets/javascripts.json');
 var users = require('./server/controllers/users');
 
 var app = express();
@@ -25,7 +24,7 @@ app.use(express.static('bower_components'));
 app.use(express.static('public'));
 app.use('/users', users);
 app.get('*', function(req, res) {
-  res.render('index', { javascripts : javascripts });
+  res.render('index');
 });
 
 // catch 404 and forward to error handler

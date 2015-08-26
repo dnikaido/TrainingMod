@@ -1,114 +1,152 @@
-'use strict';
-
-var gulp = require('gulp'),
-    gulpLoadPlugins = require('gulp-load-plugins'),
-    through = require('through'),
-    gutil = require('gulp-util'),
-    plugins = gulpLoadPlugins(),
-    globby = require('globby'),
-    fs = require('fs'),
-    _ = require('underscore');
+var gulp        = require('gulp'),
+    concat      = require('gulp-concat'),
+    plumber     = require('gulp-plumber'),
+    refresh     = require('gulp-livereload'),
+    mocha       = require('gulp-mocha'),
+    compass     = require('gulp-compass'),
+    notify      = require('gulp-notify'),
+    nodemon     = require('gulp-nodemon'),
+    jshint      = require('gulp-jshint'),
+    autoprefixer= require('gulp-autoprefixer'),
+    rename      = require('gulp-rename'),
+    minifyCss   = require('gulp-minify-css'),
+    jade        = require('gulp-jade'),
+    gutil       = require('gulp-util'),
+    karma       = require('gulp-karma'),
+    through     = require('through'),
+    fs          = require('fs-extra'),
+    _           = require('underscore');
 
 var paths = {
-    js: ['*.js', 'test/**/*.js', '!test/coverage/**', '!bower_components/**', '!node_modules/**', '!public/assets/lib/**/*.js'],
-    html: ['public/assets/html/**/*.html'],
-    css: ['!bower_components/**', 'public/assets/css/*.css'],
-    sass: ['public/views/**/*.scss'],
-    jade: ['public/views/**/*.jade']
-    },
-    javascripts = {
-        development: [
-            'bower_components/angular/angular.js',
-            'bower_components/angular-ui-router/release/angular-ui-router.js',
-            'public/**/*.js',
-            '!public/**/*.spec.js',
-            '!public/assets/**']
+        test: {
+            karma : {
+                lib:    ['bower_components/angular-mocks/angular-mocks.js'],
+                js:     ['public/**/*.js'],
+                spec:   ['public/**/*.spec.js'],
+                not:    ['public/assets/**']
+            }
+        },
+        public: {
+            js:     ['public/**/*.js', '!public/assets/**', '!public/**/*.spec.js'],
+            html:   ['public/assets/html/**/*.html'],
+            css:    ['public/assets/css/*.css'],
+            sass:   ['public/views/sass/**/*.scss'],
+            jade:   ['public/views/**/*.jade']
+        },
+        server: {
+            js:     ['*.js', 'server/**/*.js', '!server/**/*.spec.js']
+        },
+        vendor: {
+            js:     ['bower_components/angular/angular.js',
+                    'bower_components/angular-ui-router/release/angular-ui-router.js']
+        }
     };
-
-var defaultTasks = ['jade', 'clean',  'sass', 'csslint', 'javascripts', 'devServe', 'watch'];
 
 gulp.task('env:development', function () {
     process.env.NODE_ENV = 'development';
 });
 
-gulp.task('jshint', function () {
-    return gulp.src(paths.js)
-        .pipe(plugins.jshint())
-        .pipe(plugins.jshint.reporter('jshint-stylish'))
-        .pipe(plugins.jshint.reporter('fail'))
-        .pipe(count('jshint', 'files lint free'));
+gulp.task('serve', ['env:development'], function(){
+    nodemon({
+        'script':   'server.js',
+        'env':      { 'NODE_ENV': 'development'},
+        'ignore':   ['node_modules/'],
+        'watch':    paths.server.js
+    }).on('start', function() {
+        setTimeout(function() {
+            refresh();
+        }, 2000);
+    });
 });
 
-gulp.task('csslint', function () {
-    return gulp.src(paths.css)
-        .pipe(plugins.csslint('.csslintrc'))
-        .pipe(plugins.csslint.reporter())
-        .pipe(count('csslint', 'files lint free'));
+gulp.task('lint', function(){
+    return gulp.src(paths.public.js)
+        .pipe(plumber())
+        .pipe(jshint())
+        .pipe(jshint.reporter('jshint-stylish'))
+        .pipe(jshint.reporter('fail'))
+        .pipe(count('jshint', 'files lint free'))
+        .pipe(notify({message: 'jshint done'}));
 });
 
-gulp.task('sass', function() {
-    return gulp.src(paths.sass)
-        .pipe(plugins.compass({
+gulp.task('scripts', function(){
+    return gulp.src(paths.vendor.js.concat(paths.public.js))
+        .pipe(plumber())
+        .pipe(concat('main.js'))
+        .pipe(gulp.dest('./public/assets/js'))
+        .pipe(refresh())
+        .pipe(notify({message: 'JS concated'}));
+});
+
+gulp.task('sass', function(){
+    return gulp.src(paths.public.sass)
+        .pipe(plumber())
+        .pipe(compass({
             css: 'public/assets/css',
-            sass: 'public/views/',
+            sass: 'public/views/sass',
             image: 'public/assets/img',
-            require: ['susy', 'breakpoint']
+            require: ['susy', 'breakpoint', 'normalize-scss']
         })).on('error', gutil.log)
-        .pipe(plugins.autoprefixer('last 2 version', 'safari 5', 'ie 7', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
+        .pipe(autoprefixer('last 2 version', 'safari 5', 'ie 7', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
         .pipe(gulp.dest('public/assets/css'))
-        .pipe(plugins.rename({ suffix: '.min' }))
-        .pipe(plugins.minifyCss())
-        .pipe(gulp.dest('public/assets/css'));
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(minifyCss())
+        .pipe(gulp.dest('public/assets/css'))
+        .pipe(refresh())
+        .pipe(notify({message: 'sass done'}));
 });
 
-gulp.task('devServe', ['env:development'], function () {
+gulp.task('jade', function(){
+    return gulp.src(paths.public.jade)
+        .pipe(jade()).on('error', gutil.log)
+        .pipe(gulp.dest('public/assets/html'))
+        .pipe(refresh())
+        .pipe(notify({message: 'Views refreshed'}));
+});
 
-    plugins.nodemon({
-        script: 'server.js',
-        ext: 'html js',
-        env: { 'NODE_ENV': 'development' } ,
-        ignore: ['node_modules/'],
-        nodeArgs: ['--debug'],
-        stdout: false
-    }).on('readable', function() {
-        this.stdout.on('data', function(chunk) {
-            if(/Mean app started/.test(chunk)) {
-                setTimeout(function() { plugins.livereload.reload(); }, 500);
-            }
-            process.stdout.write(chunk);
-        });
-        this.stderr.pipe(process.stderr);
+gulp.task('build', ['jade', 'sass', 'scripts', 'lint', 'testAssets']);
+
+gulp.task('karma', function() {
+    return gulp.src([])
+        .pipe(karma({
+            configFile: 'karma.conf.js',
+            action: 'watch'
+        }));
+});
+
+gulp.task('watch', function(){
+    refresh.listen();
+    gulp.watch(paths.public.jade, ['jade']);
+    gulp.watch(paths.public.js, ['scripts', 'lint']);
+    gulp.watch(paths.public.sass, ['sass']);
+});
+
+gulp.task('testAssets', function(){
+    createTestAssets();
+});
+
+function createTestAssets() {
+    var testPaths = {
+        include: _.union(
+            paths.vendor.js,
+            paths.test.karma.lib,
+            paths.test.karma.js,
+            paths.test.karma.spec),
+        exclude: paths.test.karma.not
+    };
+
+    fs.emptyDir('config', function (err) {
+        if(err) {
+            gutil.log(err)
+        } else {
+            fs.writeJson('config/assets.json',testPaths, function(err) {
+                if(err) {
+                    gutil.log(err);
+                }
+            });
+        }
     });
-});
-
-gulp.task('jade', function() {
-    return gulp.src('public/views/**/*.jade')
-        .pipe(plugins.jade().on('error', gutil.log))
-        .pipe(gulp.dest('public/assets/html'));
-});
-
-gulp.task('watch', function () {
-    plugins.livereload.listen({interval:500});
-
-    gulp.watch(paths.jade,['jade']);
-    gulp.watch(paths.js, ['jshint']);
-    gulp.watch(paths.css, ['csslint']).on('change', plugins.livereload.changed);
-    gulp.watch(paths.sass, ['sass']);
-});
-
-gulp.task('javascripts', function() {
-    globby(javascripts.development, function(err, paths) {
-
-        paths = _.map(paths, function(path) {
-            return path.replace(/(public|bower_components)/, '');
-        });
-        fs.writeFile('public/assets/javascripts.json', JSON.stringify(paths), function(err) {
-            if(err) {
-                gutil.log(err);
-            }
-        });
-    });
-});
+}
 
 function count(taskName, message) {
     var fileCount = 0;
@@ -124,4 +162,4 @@ function count(taskName, message) {
     return through(countFiles, endStream);
 }
 
-gulp.task('development', defaultTasks);
+gulp.task('dev', ['build', 'serve', 'karma', 'watch']);

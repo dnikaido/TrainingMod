@@ -2,9 +2,6 @@ describe('UserController', function () {
 
     var User, controller, scope;
     beforeEach(module('app'));
-    beforeEach(module(function ($provide) {
-        $provide.value('visitor', {});
-    }));
     beforeEach(inject(function ($injector, $controller, $rootScope) {
         User = $injector.get('User');
         scope = $rootScope.$new();

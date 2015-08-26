@@ -1,5 +1,5 @@
 (function () {
-    'use strict'
+    'use strict';
 
     angular
         .module('app')
@@ -15,15 +15,11 @@
             user.greet = greet;
 
             function create() {
-                return $http.post('/users', this);
+                return $http.post('/users', user);
             }
 
             function greet() {
-                if(visitor.country === 'UK') {
-                    return 'Good day to you, ' + this.name + '.';
-                } else {
-                    return 'Hey ' + this.name + '!';
-                }
+                return 'Hey ' + user.name + '!';
             }
         };
     }

@@ -5,8 +5,9 @@ html(ng-app='app')
     title= title
     link(rel='stylesheet', href='/assets/css/main.css')
   body
-    div(ui-view)
+    div(class=wrap)
+      div(ui-view)
+    h1 heyo, finally I can write something.
 
-    for source in javascripts
-        script(src='#{source}')
+    script(src='/assets/js/main.js')
 

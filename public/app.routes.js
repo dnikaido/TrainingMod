@@ -1,4 +1,6 @@
 (function() {
+    'use strict';
+
     angular
         .module('app')
         .run(appRun);
@@ -11,7 +13,7 @@
     function getStates() {
         return [
             {
-                state: 'main',
+                state: 'home',
                 config: {
                     url: '/home',
                     templateUrl: 'assets/html/home/home.html'

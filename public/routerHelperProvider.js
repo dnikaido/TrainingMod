@@ -1,5 +1,5 @@
 (function () {
-    'use strict'
+    'use strict';
 
     angular
         .module('app')
@@ -18,12 +18,10 @@
         function RouterHelper($state) {
             var hasOtherwise = false;
 
-            var service = {
+            return {
                 configureStates: configureStates,
                 getStates: getStates
             };
-
-            return service;
 
             ///////////////
 

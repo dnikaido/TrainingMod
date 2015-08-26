@@ -2,8 +2,7 @@
 
 // Karma configuration
 module.exports = function(config) {
-    var _ = require('underscore'),
-        basePath = '.',
+    var basePath = '.',
         assets = require(basePath + '/config/assets.json');
 
     config.set({
@@ -15,15 +14,14 @@ module.exports = function(config) {
         frameworks: ['mocha', 'chai'],
 
         // list of files / patterns to load in the browser
-        files: _.flatten(_.values(assets.main.js)).concat([
-        ]),
+        files: assets.include.concat([]),
 
         // list of files to exclude
-        exclude: [],
+        exclude: assets.exclude.concat([]),
 
         // test results reporter to use
         // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-        reporters: ['progress', 'coverage', 'clear-screen'],
+        reporters: ['progress', 'coverage'],
 
         // coverage
         preprocessors: {
@@ -50,7 +48,8 @@ module.exports = function(config) {
         colors: true,
 
         // level of logging
-        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+        // possible values:
+        // config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
         logLevel: config.LOG_DEBUG,
 
         // enable / disable watching file and executing tests whenever any file changes

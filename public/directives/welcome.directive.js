@@ -1,9 +1,9 @@
 (function() {
-    'use strict'
+    'use strict';
     angular.module('app')
         .directive('welcome', function() {
             return {
-                restrict: 'E',
+                restrict: 'A',
                 scope: {
                     user: '='
                 },
@@ -18,5 +18,5 @@
                     });
                 }
             };
-        })
+        });
 })();

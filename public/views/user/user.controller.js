@@ -8,6 +8,6 @@
     function UserController($log, $scope, User) {
         var vm = this;
 
-        vm.user = $scope.user = new User('Joe');
+        vm.user = $scope.user = new User('Joey');
     }
 })();

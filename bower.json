@@ -3,7 +3,6 @@
   "dependencies": {
     "angular": "latest",
     "angular-mocks": "latest",
-    "angular-route": "latest",
     "angular-ui-router": "#master",
     "underscore": "latest"
   },

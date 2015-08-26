@@ -4,7 +4,7 @@ describe('welcome Directive', function() {
     beforeEach(module('app'));
     beforeEach(inject(function($compile, $rootScope) {
         scope = $rootScope.$new();
-        element = $compile('<welcome user="user"></welcome>')(scope);
+        element = $compile('<div welcome user="user"></div>')(scope);
         scope.user = {
             greet: function() {
                 return 'Hello!';
